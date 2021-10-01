@@ -14,6 +14,8 @@ class Customer {
     this.notes = notes;
   }
 
+  /***************** Static Methods *****************/
+
   /** find all customers. */
 
   static async all() {
@@ -77,6 +79,11 @@ class Customer {
         [this.firstName, this.lastName, this.phone, this.notes, this.id]
       );
     }
+  }
+  /***************** Instance Methods *****************/
+
+  get fullName(){
+    return `${this.firstName} ${this.lastName}`
   }
 }
 
