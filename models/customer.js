@@ -55,6 +55,22 @@ class Customer {
     return new Customer(customer);
   }
 
+  static async search(term){
+    let text = 'SELECT id, first_name AS "firstName", last_name AS "lastName", phone, notes FROM customers';
+    let values;
+    // modify our query based on whether user searched for a full name
+    const splitTerm = term.split(' ');
+    if (splitTerm.length > 1){
+      text += " WHERE first_name ILIKE '%' || $1 || '%' AND last_name ILIKE '%' || $2 || '%'";
+      values = [splitTerm[0], splitTerm[1]];
+    } else {
+      text += " WHERE first_name ILIKE '%' || $1 || '%' OR last_name ILIKE '%' || $1 || '%'";
+      values = [term];
+    }
+    const results = await db.query(text, values);
+    return results.rows.map(c => new Customer(c));
+  }
+
   /***************** Instance Methods *****************/
 
   /** get all reservations for this customer. */
