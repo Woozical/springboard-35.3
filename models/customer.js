@@ -55,6 +55,8 @@ class Customer {
     return new Customer(customer);
   }
 
+  /***************** Instance Methods *****************/
+
   /** get all reservations for this customer. */
 
   async getReservations() {
@@ -80,10 +82,9 @@ class Customer {
       );
     }
   }
-  /***************** Instance Methods *****************/
 
   get fullName(){
-    return `${this.firstName} ${this.lastName}`
+    return `${this.firstName} ${this.lastName}`;
   }
 }
 
