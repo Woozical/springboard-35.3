@@ -55,6 +55,8 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** Filter customer by first_name and/or last_name */
+
   static async search(term){
     let text = 'SELECT id, first_name AS "firstName", last_name AS "lastName", phone, notes FROM customers';
     let values;
@@ -68,6 +70,24 @@ class Customer {
       values = [term];
     }
     const results = await db.query(text, values);
+    return results.rows.map(c => new Customer(c));
+  }
+
+  /** Get top (num) customers based on reservations made */
+
+  static async getTop(num){
+    const results = await db.query(
+      `SELECT customers.id, 
+         first_name AS "firstName",  
+         last_name AS "lastName", 
+         phone, 
+         customers.notes 
+        FROM customers
+        JOIN reservations ON customers.id = reservations.customer_id
+        GROUP BY customers.id ORDER BY count(*)
+        DESC LIMIT $1`,
+      [num]
+    );
     return results.rows.map(c => new Customer(c));
   }
 
